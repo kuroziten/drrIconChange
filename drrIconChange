@@ -1,0 +1,104 @@
+iconChange("bakyura");
+
+function iconChange (iconName) {
+    const roomName = document.getElementsByName("room_name")[0].value;
+    const userName = document.getElementsByClassName("profname")[0].innerHTML;
+    
+    $.cookie('durarara-like-chat1',"",{path:"/",expires:-1});
+    
+    $.ajax('http://drrrkari.com/logout/',
+      {
+        type: 'post'
+      }
+    )
+    .done(function(data) {
+        console.log("done");
+        const html = data;
+        const div = document.createElement("div");
+        div.innerHTML = html;
+        document.getElementsByTagName("html")[0].appendChild(div);
+        const tokenLast = document.getElementsByName("token").length - 1;
+        console.log(tokenLast);
+        if (tokenLast > -1) {
+            console.log("in")
+            const token = document.getElementsByName("token")[tokenLast].value;
+            console.log("token : " + token);
+    
+            $.ajax('http://drrrkari.com/',
+              {
+                type: 'post',
+                data: {name : "黒護辞典", login : "login", language : "ja-JP", icon : iconName, token : token}
+              }
+            )
+            .done(function(data2) {
+                const html2 = data2;
+                document.getElementsByTagName("html")[0].innerHTML = data2;
+                console.log(data2);
+                const div2 = document.createElement("div");
+                div2.innerHTML = html2;
+                document.getElementsByTagName("html")[0].innerHTML = "";
+                document.getElementsByTagName("html")[0].appendChild(div2);
+                console.log(getRoomId(roomName, userName));
+    
+    
+    
+    
+    
+                
+                // http://drrrkari.com/room/
+                $.ajax('http://drrrkari.com/room/',
+                  {
+                    type: 'post',
+                    data: {id : getRoomId(roomName, userName), login : "login"}
+                  }
+                )
+                .done(function(data2) {
+                    console.log("成功？");
+                    location.reload();
+                });
+                // http://drrrkari.com/room/
+    
+    
+    
+    
+    
+                
+                
+                // location.reload();
+            });
+        } else {
+            console.log("tokenが取得出来ませんでした。")
+        }
+    });    
+}
+
+
+
+
+function getRoomId (roomName, userName) {
+    const names = document.getElementsByClassName("name");
+    let breakFlg = false;
+    let id = "";
+    for (i = 0; i < names.length; i++) {
+        const name = names[i];
+        if (name.innerHTML == roomName)　{
+            const next = name.nextElementSibling.getElementsByTagName("li");
+            for (i2 = 0; i2 < next.length; i2++) {
+                e = next[i2];
+                if (e.getElementsByTagName("img").length > 0) {
+                    e.getElementsByTagName("img")[0].remove();
+                }
+                if (next[0].innerHTML == userName) {
+                    console.log("ヒットしました");
+                    breakFlg = true;
+                    id = name.nextElementSibling.nextElementSibling.nextElementSibling.getElementsByTagName("input")[0].value;
+                    break;
+                }
+            }
+            if (breakFlg) break;
+        }
+    }
+    console.log(id);
+    return id;
+}
+
