@@ -32,7 +32,6 @@ pop.style.height = "80vh";
 pop.style.left = "5vw";
 pop.style.top = "10vh";
 pop.style.backgroundColor = "white";
-//pop.style.opacity = "0.5";
 document.getElementsByTagName("html")[0].append(pop);
 document.getElementsByClassName("message_box")[0].style.zIndex = "0";
 pop.append(girl);
@@ -73,12 +72,10 @@ function createImg (url, name) {
 
 
 
-// iconChange("nyan");
 
 function iconChange (iconName) {
     const roomName = document.getElementsByName("room_name")[0].value;
     const userName = document.getElementsByClassName("profname")[0].innerHTML;
-    // const userName = "黒護辞典";
     
     $.cookie('durarara-like-chat1',"",{path:"/",expires:-1});
     
@@ -96,7 +93,7 @@ function iconChange (iconName) {
         const tokenLast = document.getElementsByName("token").length - 1;
         console.log(tokenLast);
         if (tokenLast > -1) {
-            console.log("in")
+            console.log("in");
             const token = document.getElementsByName("token")[tokenLast].value;
             console.log("token : " + token);
     
@@ -121,7 +118,6 @@ function iconChange (iconName) {
     
     
                 
-                // http://drrrkari.com/room/
                 $.ajax('http://drrrkari.com/room/',
                   {
                     type: 'post',
@@ -132,7 +128,6 @@ function iconChange (iconName) {
                     console.log("成功？");
                     location.reload();
                 });
-                // http://drrrkari.com/room/
     
     
     
@@ -140,10 +135,9 @@ function iconChange (iconName) {
     
                 
                 
-                // location.reload();
             });
         } else {
-            console.log("tokenが取得出来ませんでした。")
+            console.log("tokenが取得出来ませんでした。");
         }
     });    
 }
