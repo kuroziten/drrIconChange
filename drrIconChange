@@ -88,7 +88,7 @@ function getRoomId (roomName, userName) {
                 if (e.getElementsByTagName("img").length > 0) {
                     e.getElementsByTagName("img")[0].remove();
                 }
-                if (next[0].innerHTML == userName) {
+                if (next[i2].innerHTML == userName) {
                     console.log("ヒットしました");
                     breakFlg = true;
                     id = name.nextElementSibling.nextElementSibling.nextElementSibling.getElementsByTagName("input")[0].value;
