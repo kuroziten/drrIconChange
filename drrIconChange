@@ -1,8 +1,84 @@
-iconChange("bakyura");
+
+
+
+
+const girl = createImg("http://drrrkari.com/css/icon_girl.png", "girl");
+const moza = createImg("http://drrrkari.com/css/icon_moza.png", "moza");
+const tanaka = createImg("http://drrrkari.com/css/icon_tanaka.png", "tanaka");
+const kanra = createImg("http://drrrkari.com/css/icon_kanra.png", "kanra");
+const usa = createImg("http://drrrkari.com/css/icon_usa.png", "usa");
+const gg = createImg("http://drrrkari.com/css/icon_gg.png", "gg");
+const orange = createImg("http://drrrkari.com/css/icon_orange.png", "orange");
+const zaika = createImg("http://drrrkari.com/css/icon_zaika.png", "zaika");
+const setton = createImg("http://drrrkari.com/css/icon_setton.png", "setton");
+const zawa = createImg("http://drrrkari.com/css/icon_zawa.png", "zawa");
+const neko = createImg("http://drrrkari.com/css/icon_neko.png", "neko");
+const purple = createImg("http://drrrkari.com/css/icon_purple.png", "purple");
+const kai = createImg("http://drrrkari.com/css/icon_kai.png", "kai");
+const bakyura = createImg("http://drrrkari.com/css/icon_bakyura.png", "bakyura");
+const neko2 = createImg("http://drrrkari.com/css/icon_neko2.png", "neko2");
+const numakuro = createImg("http://drrrkari.com/css/icon_numakuro.png", "numakuro");
+const bm = createImg("http://drrrkari.com/css/icon_bm.png", "bm");
+const bear = createImg("http://drrrkari.com/css/icon_bear.png", "bear");
+const rab = createImg("http://drrrkari.com/css/icon_rab.png", "rab");
+const nyan = createImg("http://drrrkari.com/css/icon_nyan.png", "nyan");
+const muff = createImg("http://drrrkari.com/css/icon_muff.png", "muff");
+const muff_nyan = createImg("http://drrrkari.com/css/icon_muff_nyan.png", "muff_nyan");
+
+const pop = document.createElement("div");
+pop.style.position = "fixed";
+pop.style.width = "90vw";
+pop.style.height = "80vh";
+pop.style.left = "5vw";
+pop.style.top = "10vh";
+pop.style.backgroundColor = "white";
+//pop.style.opacity = "0.5";
+document.getElementsByTagName("html")[0].append(pop);
+document.getElementsByClassName("message_box")[0].style.zIndex = "0";
+pop.append(girl);
+pop.append(moza);
+pop.append(tanaka);
+pop.append(kanra);
+pop.append(usa);
+pop.append(gg);
+pop.append(orange);
+pop.append(zaika);
+pop.append(setton);
+pop.append(zawa);
+pop.append(neko);
+pop.append(purple);
+pop.append(kai);
+pop.append(bakyura);
+pop.append(neko2);
+pop.append(numakuro);
+pop.append(bm);
+pop.append(bear);
+pop.append(rab);
+pop.append(nyan);
+pop.append(muff);
+pop.append(muff_nyan);
+
+function createImg (url, name) {
+    const img = document.createElement("img");
+    img.src = url;
+    img.style.width = "8%";
+    img.style.padding = "1%";
+    img.onclick = function () {iconChange(name)};
+    return img;
+}
+
+
+
+
+
+
+
+// iconChange("nyan");
 
 function iconChange (iconName) {
     const roomName = document.getElementsByName("room_name")[0].value;
     const userName = document.getElementsByClassName("profname")[0].innerHTML;
+    // const userName = "黒護辞典";
     
     $.cookie('durarara-like-chat1',"",{path:"/",expires:-1});
     
@@ -80,10 +156,14 @@ function getRoomId (roomName, userName) {
     let breakFlg = false;
     let id = "";
     for (i = 0; i < names.length; i++) {
+        console.log("loop i :" + i);
+        
         const name = names[i];
         if (name.innerHTML == roomName)　{
             const next = name.nextElementSibling.getElementsByTagName("li");
             for (i2 = 0; i2 < next.length; i2++) {
+                console.log("loop i2 :" + i2);
+
                 e = next[i2];
                 if (e.getElementsByTagName("img").length > 0) {
                     e.getElementsByTagName("img")[0].remove();
@@ -101,4 +181,3 @@ function getRoomId (roomName, userName) {
     console.log(id);
     return id;
 }
-
