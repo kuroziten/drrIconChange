@@ -27,7 +27,7 @@ function iconChange (iconName) {
             $.ajax('http://drrrkari.com/',
               {
                 type: 'post',
-                data: {name : "黒護辞典", login : "login", language : "ja-JP", icon : iconName, token : token}
+                data: {name : userName, login : "login", language : "ja-JP", icon : iconName, token : token}
               }
             )
             .done(function(data2) {
