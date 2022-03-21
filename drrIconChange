@@ -1,7 +1,4 @@
-
-
-
-
+/* アイコン情報を取得 */
 const girl = createImg("http://drrrkari.com/css/icon_girl.png", "girl");
 const moza = createImg("http://drrrkari.com/css/icon_moza.png", "moza");
 const tanaka = createImg("http://drrrkari.com/css/icon_tanaka.png", "tanaka");
@@ -25,6 +22,7 @@ const nyan = createImg("http://drrrkari.com/css/icon_nyan.png", "nyan");
 const muff = createImg("http://drrrkari.com/css/icon_muff.png", "muff");
 const muff_nyan = createImg("http://drrrkari.com/css/icon_muff_nyan.png", "muff_nyan");
 
+/* アイコン選択画面の設定 */
 const pop = document.createElement("div");
 pop.style.position = "fixed";
 pop.style.width = "90vw";
@@ -32,8 +30,10 @@ pop.style.height = "80vh";
 pop.style.left = "5vw";
 pop.style.top = "10vh";
 pop.style.backgroundColor = "white";
+
+/* アイコン選択画面を表示 */
 document.getElementsByTagName("html")[0].append(pop);
-document.getElementsByClassName("message_box")[0].style.zIndex = "0";
+/* アイコン選択画面にアイコンを設定 */
 pop.append(girl);
 pop.append(moza);
 pop.append(tanaka);
@@ -57,6 +57,9 @@ pop.append(nyan);
 pop.append(muff);
 pop.append(muff_nyan);
 
+/* アイコン選択画面の上に重なっちゃうから後ろに下げる */
+document.getElementsByClassName("message_box")[0].style.zIndex = "0";
+
 function createImg (url, name) {
     const img = document.createElement("img");
     img.src = url;
@@ -66,112 +69,106 @@ function createImg (url, name) {
     return img;
 }
 
-
-
-
-
-
-
-
+/** アイコンを変える処理 */
 function iconChange (iconName) {
+
+    /* 部屋名を取得 */
     const roomName = document.getElementsByName("room_name")[0].value;
+    /* ユーザ名を取得 */
     const userName = document.getElementsByClassName("profname")[0].innerHTML;
-    
+    const userSetName = userName;
+    /* HTML消す(画面描画処理なくせばちょっと処理速度速くなるんじゃね的な) */
+    document.getElementsByTagName("html").innerHTML = "";
+
+    /* cookieの削除(削除後、一定時間経過で接続が切れる) */
     $.cookie('durarara-like-chat1',"",{path:"/",expires:-1});
-    
+
+    /* ログアウト */
     $.ajax('http://drrrkari.com/logout/',
       {
         type: 'post'
       }
     )
     .done(function(data) {
-        console.log("done");
+
+        /* ログアウト後画面のHTMLを取得 */
         const html = data;
+        /* ログアウト後画面を使用するためdiv要素に格納 */
         const div = document.createElement("div");
         div.innerHTML = html;
+        /* ログアウト後画面を見えなくする。その方が処理速度速くなりそうな気がした。 */
+        div.style.display = "none";
+        /* HTMLにログアウト後画面を格納 */
         document.getElementsByTagName("html")[0].appendChild(div);
+
+        /* ログイン用トークンの存在確認(ログインするときにサーバのトークン情報と一致しないとログインできないぽい) */
         const tokenLast = document.getElementsByName("token").length - 1;
-        console.log(tokenLast);
+
+        /* トークンが存在する場合 */
         if (tokenLast > -1) {
-            console.log("in");
+            /* トークンを取得 */
             const token = document.getElementsByName("token")[tokenLast].value;
-            console.log("token : " + token);
-    
+            /* HTMLはもういらないから消しておく */
+            document.getElementsByTagName("html")[0].innerHTML = "";
+
+            /* トークン情報を使ってトップ画面にログイン */
             $.ajax('http://drrrkari.com/',
               {
                 type: 'post',
-                data: {name : userName, login : "login", language : "ja-JP", icon : iconName, token : token}
+                data: {name : userSetName, login : "login", language : "ja-JP", icon : iconName, token : token}
               }
             )
             .done(function(data2) {
+                /* トップ画面のHTMLを取得 */
                 const html2 = data2;
-                document.getElementsByTagName("html")[0].innerHTML = data2;
-                console.log(data2);
+                /* トップ画面のHTMLをdiv要素に格納 */
                 const div2 = document.createElement("div");
                 div2.innerHTML = html2;
-                document.getElementsByTagName("html")[0].innerHTML = "";
+                /*トップ画面を見えなくする*/
+                div2.style.display = "none";
+                /* トップ画面をHTMLに格納 */
                 document.getElementsByTagName("html")[0].appendChild(div2);
-                console.log(getRoomId(roomName, userName));
-    
-    
-    
-    
-    
-                
+                /* 部屋名とユーザ名をもとに部屋のIDを特定する */
+                const roomId = getRoomId(roomName, userName);
+                /* 部屋のIDをもとに入室 */
                 $.ajax('http://drrrkari.com/room/',
                   {
                     type: 'post',
-                    data: {id : getRoomId(roomName, userName), login : "login"}
+                    data: {id : roomId, login : "login"}
                   }
                 )
                 .done(function(data2) {
-                    console.log("成功？");
+                    /* 入室出来たので画面をリロードする(リロードしないと"接続が切れました"ってやつが出ちゃう) */
                     location.reload();
                 });
-    
-    
-    
-    
-    
-                
-                
             });
         } else {
             console.log("tokenが取得出来ませんでした。");
         }
-    });    
+    });
 }
 
-
-
-
+/** ルームID取得処理 */
 function getRoomId (roomName, userName) {
+    /* トップ画面のnameの要素を全て取得(部屋名) */
     const names = document.getElementsByClassName("name");
-    let breakFlg = false;
-    let id = "";
-    for (i = 0; i < names.length; i++) {
-        console.log("loop i :" + i);
-        
-        const name = names[i];
-        if (name.innerHTML == roomName)　{
-            const next = name.nextElementSibling.getElementsByTagName("li");
-            for (i2 = 0; i2 < next.length; i2++) {
-                console.log("loop i2 :" + i2);
 
-                e = next[i2];
-                if (e.getElementsByTagName("img").length > 0) {
-                    e.getElementsByTagName("img")[0].remove();
-                }
-                if (next[i2].innerHTML == userName) {
-                    console.log("ヒットしました");
-                    breakFlg = true;
-                    id = name.nextElementSibling.nextElementSibling.nextElementSibling.getElementsByTagName("input")[0].value;
-                    break;
-                }
-            }
-            if (breakFlg) break;
+    /* nameの要素分ループ */
+    for (i = 0; i < names.length; i++) {
+        /* name要素を取得 */
+        const name = names[i];
+        /* name要素の部屋名と探してる部屋名が一致した場合 */
+        if (name.innerHTML == roomName)　{
+            /* 入室してる人のリストを取得 */
+            const next = name.nextElementSibling;
+            const nextAll = next.innerHTML.replace(/\s+/g, "");
+            /* 入室している人のリストに探してるユーザ名が存在する場合 */
+            if ( nextAll.indexOf('>' + userName + '<') != -1) {
+                /* その部屋のルームIDを返却 */
+                return next.nextElementSibling.nextElementSibling.getElementsByTagName("input")[0].value;
+            }            
         }
     }
-    console.log(id);
-    return id;
+    /* 基本ここには到達しない想定 */
+    return null;
 }
