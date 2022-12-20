@@ -82,7 +82,7 @@ function iconChange (iconName) {
 
     /* 入室時のform */
     const form = document.createElement('form');
-    form.action = 'http://drrrkari.com/room/';
+    form.action = 'https://drrrkari.com/room/';
     form.method = 'post';
     const q2 = document.createElement('input');
     q2.value = 'login';
@@ -100,7 +100,7 @@ function iconChange (iconName) {
     $.cookie('_ga',"",{path:"/",expires:-1});
 
     /* ログアウト */
-    $.ajax('http://drrrkari.com/logout/',
+    $.ajax('https://drrrkari.com/logout/',
       {
         type: 'post'
       }
@@ -128,7 +128,7 @@ function iconChange (iconName) {
             document.getElementsByTagName("html")[0].innerHTML = "";
 
             /* トークン情報を使ってトップ画面にログイン */
-            $.ajax('http://drrrkari.com/',
+            $.ajax('https://drrrkari.com/',
               {
                 type: 'post',
                 data: {name : userSetName, login : "login", language : "ja-JP", icon : iconName, token : token}
@@ -155,7 +155,7 @@ function iconChange (iconName) {
                 form.submit();
                 
                 /* 部屋のIDをもとに入室 */
-                //$.ajax('http://drrrkari.com/room/',
+                //$.ajax('https://drrrkari.com/room/',
                 //  {
                 //    type: 'post',
                 //    data: {id : roomId, login : "login"}
